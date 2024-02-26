@@ -12,14 +12,6 @@ informações.
 
 ## O que fazer:
 
-Electron js:
-Rodar um servidor na rede.
-Vai lidar com as requests de texto
-ou de arquivos no geral
-
-React Native com Expo:
-Vai fazer as requests subindo arquivos ou texto
-
 Como tornar o servidor Node acessível
 pela rede wi-fi local:
 Colocar o endereço (host) como o seu endereço
