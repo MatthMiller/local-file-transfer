@@ -3,7 +3,7 @@ node_modules/
 
 # Expo
 .expo/
-dist/
+# dist/
 web-build/
 
 # Native
@@ -31,3 +31,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+dist/src/
+dist/package.json

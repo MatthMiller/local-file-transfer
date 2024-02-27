@@ -10,7 +10,13 @@ const App = () => {
       console.log('Conectado ao servidor Socket.IO');
 
       // Envie uma mensagem para o servidor (pode ser um arquivo ou texto)
-      socket.emit('message', 'Olá, servidor!');
+      socket.emit(
+        'message',
+        JSON.stringify({
+          client: 'Mobile',
+          message: 'Olá, servidor, estou acessando do React Native com Expo!',
+        })
+      );
     });
 
     socket.on('message', (message) => {
