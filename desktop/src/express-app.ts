@@ -13,6 +13,9 @@ const app = express();
 
 // 🐱‍🐉🐱‍🐉🌟
 // Próxima coisa a testar: upload de imagem pelo React Native
+// https://socket.io/pt-br/how-to/upload-a-file
+
+// Ao iniciar a API deletar todos os arquivos temporários?
 
 // Ver uma forma de separar os arquivos recebidos
 // via websockets em uma pasta específica com uuid,
