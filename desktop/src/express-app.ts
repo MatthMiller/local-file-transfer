@@ -7,11 +7,15 @@ import http from 'http';
 import createError from 'http-errors';
 import { expressPort } from '../package.json';
 import { Server } from 'socket.io';
+import { v4 as uuidv4 } from 'uuid';
+import fs, { writeFile } from 'fs';
+import ip from 'ip';
 
 const app = express();
 // const router = express.Router();
-
 // 🐱‍🐉🐱‍🐉🌟
+// Gerador de QRCode pelo JavaScript (20kb): https://davidshimjs.github.io/qrcodejs/
+
 // Próxima coisa a testar: upload de imagem pelo React Native
 
 // Ver uma forma de separar os arquivos recebidos
@@ -31,12 +35,14 @@ const app = express();
 app.set('port', expressPort);
 app.set('views', path.join(__dirname, '..', 'views'));
 
+//  http://192.168.15.50:3000/files/teste.txt
+app.set('files', path.join(__dirname, '..', 'files'));
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '..', 'public')));
-
 app.use('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'views', 'index.html'));
 });
@@ -53,17 +59,143 @@ app.use((err: any, req: any, res: any, _next: any) => {
 const server = http.createServer(app);
 const io = new Server(server);
 
+let connectedDevicesList: any = [];
+let links: any = [];
+
 io.on('connection', (socket: any) => {
-  console.log('Um cliente se conectou via Socket.IO');
+  console.log('! Um cliente se conectou. !');
+
+  const isAlreadyConnected =
+    connectedDevicesList.filter((device: any) => device.id === socket.id)
+      .length === 1;
+  console.log(socket.id, 'já está conectado?', isAlreadyConnected);
+  if (!isAlreadyConnected) {
+    connectedDevicesList.push({
+      device: 'undefined',
+      id: socket.id,
+    });
+    socket.broadcast.emit(
+      'connectedDevices',
+      JSON.stringify(connectedDevicesList)
+    );
+  }
+
+  connectedDevicesList.forEach((device: any) => {
+    console.log(JSON.stringify(device));
+  });
+
+  socket.on('setPlatform', (plaftorm: any) => {
+    if (plaftorm === 'Desktop') {
+      connectedDevicesList = connectedDevicesList.map((device: any) => {
+        if (device.id === socket.id) {
+          return {
+            ...device,
+            device: 'Desktop',
+          };
+        }
+        return device;
+      });
+    }
+
+    try {
+      if (JSON.parse(plaftorm) instanceof Object) {
+        connectedDevicesList = connectedDevicesList.map((device: any) => {
+          if (device.id === socket.id) {
+            return {
+              ...device,
+              platform: 'Mobile',
+              device: JSON.parse(plaftorm).modelName,
+            };
+          }
+          return device;
+        });
+      }
+    } catch (error) {}
+
+    connectedDevicesList.forEach((device: any) => {
+      console.log(JSON.stringify(device));
+    });
+
+    socket.broadcast.emit(
+      'connectedDevices',
+      JSON.stringify(connectedDevicesList)
+    );
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`O cliente ${socket.id} se desconectou.`);
+
+    connectedDevicesList = connectedDevicesList.filter(
+      (device: any) => device.id !== socket.id
+    );
+
+    socket.broadcast.emit(
+      'connectedDevices',
+      JSON.stringify(connectedDevicesList)
+    );
+  });
 
   // Manipule as mensagens recebidas do cliente
-  socket.on('message', (message: any) => {
-    console.log(`Recebido: ${message}`);
-    // Lide com a mensagem recebida (por exemplo, transferência de arquivo)
-    // Envie uma resposta para o cliente (pode ser um ACK, etc.)
-    socket.emit('message', 'Mensagem recebida com sucesso!');
+  socket.on('uploadFile', (file: any) => {
+    try {
+      const fileObject = JSON.parse(file);
+      const newFile = Buffer.from(fileObject.buffer, 'base64');
+      const extension = fileObject.originalName.split('.').pop();
+      const fileName = uuidv4() + '.' + extension;
+      const dirPath = path.join(__dirname, '..', 'public', 'files');
+      const filePath = path.join(dirPath, fileName);
+      // Cria o diretório caso não exista
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
 
-    // if message.type === 'file' ... salvar arquivo e retornar link
+      links.push({
+        fileName,
+        originalName: fileObject.originalName,
+        sentFromId: socket.id,
+        sentFromName: connectedDevicesList.filter(
+          (device: any) => device.id === socket.id
+        )[0].device,
+        alreadyUploaded: false,
+      });
+
+      socket.broadcast.emit('sentFiles', JSON.stringify(links));
+
+      writeFile(filePath, newFile, (err) => {
+        if (err) throw err;
+      });
+
+      console.log('\nRecebido arquivo:', fileObject.originalName);
+      console.log('\nSalvando em:', filePath);
+
+      links = links.map((link: any) => {
+        if (link.fileName === fileName) {
+          return {
+            ...link,
+            alreadyUploaded: true,
+            fileLink: `http://${ip.address()}:${app.get(
+              'port'
+            )}/files/${fileName}`,
+          };
+        }
+        return link;
+      });
+
+      // links.push({
+      //   fileName,
+      //   originalName: fileObject.originalName,
+      //   sentFromId: socket.id,
+      //   sentFromName: connectedDevicesList.filter(
+      //     (device: any) => device.id === socket.id
+      //   )[0].device,
+      //   alreadyUploaded: true,
+      //   fileLink: `http://${ip.address()}:${app.get('port')}/files/${fileName}`,
+      // });
+
+      socket.broadcast.emit('sentFiles', JSON.stringify(links));
+    } catch (error) {
+      console.log(error);
+    }
   });
 });
 

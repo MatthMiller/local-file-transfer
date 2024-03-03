@@ -8,8 +8,18 @@ let canSendMessage = false;
 
 socket.on('connect', () => {
   canSendMessage = true;
+  socket.emit('setPlatform', 'Desktop');
 
   console.log('Conectado ao servidor Socket.IO');
+
+  // Como ouvir uma mensagem do servidor que está como socket.emit.broadcast('nomeDoEvento', 'mensagem')?
+  socket.on('connectedDevices', (actualDevices) => {
+    console.log(`Dispositivos conectados: ${actualDevices}`);
+  });
+
+  socket.on('sentFiles', (files) => {
+    console.log(`Arquivos: ${files}`);
+  });
 });
 
 // Substituir por input de arquivo ou texto
