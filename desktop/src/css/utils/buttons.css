@@ -1,0 +1,43 @@
+.utils-grey-button,
+.utils-grey-button-only-icon {
+    padding: 6px;
+    border-radius: 5px;
+    background-color: #1D1D1D;
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9B9B9B;
+    font-size: 1rem;
+    line-height: 1;
+    height: max-content;
+    cursor: pointer;
+    transition: 150ms;
+    user-select: none;
+}
+
+.utils-grey-button {
+    padding-left: 8px;
+    padding-right: 11px;
+}
+
+.utils-grey-button-only-icon svg {
+    display: flex;
+}
+
+.utils-grey-button:hover,
+.utils-grey-button-only-icon:hover {
+    background-color: #242424;
+    color: #F5F5F5;
+}
+
+.utils-grey-button:hover svg path,
+.utils-grey-button-only-icon:hover svg path{
+    transition: 150ms;
+}
+
+.utils-grey-button:hover svg path,
+.utils-grey-button-only-icon:hover svg path {
+    fill: #F5F5F5;
+}

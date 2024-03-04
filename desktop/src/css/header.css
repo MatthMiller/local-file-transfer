@@ -1,0 +1,38 @@
+.header {
+    background-color: #101010;
+    padding: 15px 24px;
+    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #282828;
+}
+
+.header .middle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+}
+
+.header .middle .tag  {
+    letter-spacing: 0.32px;
+    font-size: .75rem;
+    line-height: 1;
+    font-weight: 600;
+    color: #A9A9A9;
+}
+
+.header .middle .address {
+    font-family: 'IBM Plex Mono';
+    font-size: 1.3125rem;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.header .right {
+    display: flex;
+    gap: 16px;
+    place-self: end;
+}
