@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { Server } = require('socket.io');
 const fs = require('fs');
 const path = require('node:path');
+const { v4: uuidv4 } = require('uuid');
 
 const port = 3000;
 const expressAppIP = ip.address();
@@ -16,7 +17,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: false,
+      nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -144,10 +145,6 @@ app.whenReady().then(() => {
         const extension = fileObject.originalName.split('.').pop();
         const fileName = uuidv4() + '.' + extension;
         const filePath = path.join(filesPath, fileName);
-        // Cria o diretório caso não exista
-        if (!fs.existsSync(dirPath)) {
-          fs.mkdirSync(dirPath, { recursive: true });
-        }
 
         links.push({
           fileName,
@@ -161,7 +158,7 @@ app.whenReady().then(() => {
 
         socket.broadcast.emit('sentFiles', JSON.stringify(links));
 
-        writeFile(filePath, newFile, (err) => {
+        fs.writeFile(filePath, newFile, (err) => {
           if (err) throw err;
         });
 
