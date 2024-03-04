@@ -1,0 +1,68 @@
+.utils-accordion-wrapper {
+    padding: 0px 24px;
+    margin-bottom: 48px;
+}
+
+.utils-accordion-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.utils-accordion-item-counter,
+.utils-accordion-item-model span {
+    color: #A6A6A6;
+    font-family: 'IBM Plex Mono';
+    font-weight: 300;
+}
+
+.utils-accordion-item {
+    padding: 14px 15px;
+    border: 1px solid #282828;
+    border-radius: 5px;
+    background-color: #101010;
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.utils-accordion-item-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.utils-accordion-item-device-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.utils-accordion-item-model {
+    font-size: 1rem;
+    line-height: 1;
+    font-weight: 400;
+}
+
+.utils-accordion-item-status {
+    letter-spacing: 0.32px;
+    font-size: .75rem;
+    line-height: 1;
+    font-weight: 600;
+    color: #A9A9A9;
+}
+
+.utils-accordion-item-status span{
+    color: #F5F5F5;
+}
+
+.utils-accordion-item-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-content: flex-end;
+}

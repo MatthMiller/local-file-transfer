@@ -17,6 +17,7 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
+      autoHideMenuBar: true,
       nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
@@ -60,7 +61,9 @@ app.whenReady().then(() => {
   });
 
   const server = http.createServer(expressApp);
-  const io = new Server(server);
+  const io = new Server(server, {
+    maxHttpBufferSize: 1e9, // 1 GB em bytes
+  });
 
   let connectedDevicesList = [];
   let links = [];
@@ -76,10 +79,7 @@ app.whenReady().then(() => {
         device: 'undefined',
         id: socket.id,
       });
-      socket.broadcast.emit(
-        'connectedDevices',
-        JSON.stringify(connectedDevicesList)
-      );
+      io.emit('connectedDevices', JSON.stringify(connectedDevicesList));
     }
 
     connectedDevicesList.forEach((device) => {
@@ -118,10 +118,7 @@ app.whenReady().then(() => {
         console.log(JSON.stringify(device));
       });
 
-      socket.broadcast.emit(
-        'connectedDevices',
-        JSON.stringify(connectedDevicesList)
-      );
+      io.emit('connectedDevices', JSON.stringify(connectedDevicesList));
     });
 
     socket.on('disconnect', () => {
@@ -137,11 +134,9 @@ app.whenReady().then(() => {
       );
     });
 
-    // Manipule as mensagens recebidas do cliente
     socket.on('uploadFile', (file) => {
       try {
         const fileObject = JSON.parse(file);
-        const newFile = Buffer.from(fileObject.buffer, 'base64');
         const extension = fileObject.originalName.split('.').pop();
         const fileName = uuidv4() + '.' + extension;
         const filePath = path.join(filesPath, fileName);
@@ -156,7 +151,11 @@ app.whenReady().then(() => {
           alreadyUploaded: false,
         });
 
-        socket.broadcast.emit('sentFiles', JSON.stringify(links));
+        io.emit('sentFiles', JSON.stringify(links));
+
+        if (fileObject.buffer === null) return;
+
+        const newFile = Buffer.from(fileObject.buffer, 'base64');
 
         fs.writeFile(filePath, newFile, (err) => {
           if (err) throw err;
@@ -176,7 +175,7 @@ app.whenReady().then(() => {
           return link;
         });
 
-        socket.broadcast.emit('sentFiles', JSON.stringify(links));
+        io.emit('sentFiles', JSON.stringify(links));
       } catch (error) {
         console.log(error);
       }
