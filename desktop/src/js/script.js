@@ -1,8 +1,13 @@
 import { io } from 'socket.io-client';
 import updateConnectedDevices from './updateConnectedDevices.js';
 import updateHeader from './updateHeader.js';
+import setAccordionListeners from './setAccordionListeners.js';
+import updateSentFiles from './updateSentFiles.js';
 
 let canSendMessage = false;
+
+// Ativa função para lidar com Accordion
+setAccordionListeners();
 
 const startClient = async () => {
   const { appIpAddress } = window.ipcRender;
@@ -12,7 +17,6 @@ const startClient = async () => {
 };
 
 let socket = null;
-
 const runServer = (ipAddress) => {
   socket = io(`http://${ipAddress}:3000`);
 
@@ -29,10 +33,9 @@ const runServer = (ipAddress) => {
 
     socket.on('sentFiles', (files) => {
       console.log(`Arquivos: ${files}`);
+      updateSentFiles(JSON.parse(files), socket.id);
     });
   });
-
-  // Meu código de interação com html aqui
 
   // Substituir por input de texto
   // if (canSendMessage)
@@ -46,12 +49,17 @@ const runServer = (ipAddress) => {
 startClient();
 
 const uploadFile = async () => {
-  const { originalName, base64 } = await pickSingleFile();
+  const { originalName, base64, uuid, fileSize } = await pickSingleFile();
 
   if (socket) {
     socket.emit(
       'uploadFile',
-      JSON.stringify({ originalName: originalName, buffer: base64 })
+      JSON.stringify({
+        originalName: originalName,
+        buffer: base64,
+        uuid,
+        fileSize,
+      })
     );
   }
 };
@@ -60,15 +68,20 @@ const pickSingleFile = async () => {
   const [fileHandle] = await window.showOpenFilePicker();
   const file = await fileHandle.getFile();
   const originalName = file.name;
+  const fileSize = file.size;
+  const uuid = self.crypto.randomUUID();
   if (socket) {
     // Apenas para avisar que o arquivo está chegando
     // falta só chegar o base64 (função uploadFile)
-    socket.emit('uploadFile', JSON.stringify({ originalName, buffer: null }));
+    socket.emit(
+      'uploadFile',
+      JSON.stringify({ originalName, buffer: null, uuid, fileSize })
+    );
   }
   // Processo demorado
   const base64 = await getBase64(file);
 
-  return { originalName, base64 };
+  return { originalName, base64, uuid, fileSize };
 };
 
 function getBase64(file) {

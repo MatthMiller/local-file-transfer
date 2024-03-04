@@ -2,7 +2,7 @@ const updateConnectedDevices = (connectedDevices) => {
   console.log('dispositivos conectados:', connectedDevices);
   // id = js-server-address
   const connectedDevicesElement = document.querySelector(
-    '#js-accordion-content'
+    '#js-accordion-connected-devices-content'
   );
 
   const connectedDevicesCounter = document.querySelector(
@@ -22,8 +22,8 @@ const updateConnectedDevices = (connectedDevices) => {
   // lista de links)
 
   // Descomentar depois com o código correto de acordo com o css
-  connectedDevicesElement.innerHTML = connectedDevicesWithoutDesktop.map(
-    ({ device, id }) => {
+  connectedDevicesElement.innerHTML = connectedDevicesWithoutDesktop
+    .map(({ device, id }) => {
       return `
       <div data-id="${id}" class="utils-accordion-item">
       <div class="utils-accordion-item-left">
@@ -53,8 +53,14 @@ const updateConnectedDevices = (connectedDevices) => {
       </div>
     </div>
       `;
-    }
-  );
+    })
+    .join('');
+
+  if (connectedDevicesWithoutDesktop.length === 0) {
+    connectedDevicesElement.innerHTML = `
+      <p class="utils-accordion-hint-text">No devices connected.</p>
+      `;
+  }
 };
 
 export default updateConnectedDevices;

@@ -1,6 +1,10 @@
 .utils-accordion-wrapper {
     padding: 0px 24px;
-    margin-bottom: 48px;
+    transition: 150ms;
+}
+
+.utils-accordion-wrapper.active {
+    padding-bottom: 48px;
 }
 
 .utils-accordion-title {
@@ -9,8 +13,20 @@
     gap: 8px;
     font-weight: 400;
     font-size: 1rem;
-    line-height: 1;
+    line-height: 1.375rem;
+    max-width: max-content;
     margin-bottom: 16px;
+
+    padding: 4px 10px 4px 4px;
+    border-radius: 5px;
+    transition: 150ms;
+}
+
+.utils-accordion-model,
+.utils-accordion-title svg,
+.utils-accordion-title svg path,
+.utils-accordion-title p {
+    pointer-events: none;
 }
 
 .utils-accordion-item-counter,
@@ -28,6 +44,10 @@
 
     display: grid;
     grid-template-columns: 2fr 1fr;
+}
+
+.utils-accordion-item:not(:first-of-type) {
+    margin-top: 12px;
 }
 
 .utils-accordion-item-left {
@@ -65,4 +85,72 @@
     align-items: center;
     gap: 16px;
     justify-content: flex-end;
+}
+
+.utils-accordion-item-right-info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    justify-content: flex-end;
+    text-align: end;
+}
+
+
+.utils-accordion-date,
+.utils-accordion-time {
+    font-family: 'IBM Plex Mono';
+    font-size: .875rem;
+    line-height: 1;
+}
+
+.utils-accordion-date {
+    color: #A9A9A9;
+    font-size: .75rem;    
+}
+
+.utils-accordion-time {
+    color: #F5F5F5;
+}
+
+.utils-accordion-title:hover {
+    background-color: #1D1D1D;
+    cursor: pointer;
+}
+
+.utils-accordion-title svg path,
+.utils-accordion-title svg{
+    transition: 150ms;
+}
+
+.utils-accordion-title:hover svg path {
+    fill: #F5F5F5;
+}
+
+/* Animação de accordion, abrindo e fechando: */
+.utils-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 150ms ease, transform 300ms ease, opacity 150ms ease;
+    transform: translateY(-16px);
+    opacity: 0;
+}
+
+.utils-accordion-wrapper.active .utils-accordion-content {
+    max-height: 1000px;
+    transition: max-height 300ms ease, transform 300ms ease, opacity 150ms ease;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.utils-accordion-wrapper:not(.active) .utils-accordion-title svg {
+    /* rotate */
+    transform: rotate(-90deg);
+}
+
+.utils-accordion-hint-text {
+    font-size: .875rem;
+    line-height: auto;
+    color: #A9A9A9;
+    font-family: 'IBM Plex Mono';
+    margin-left: 16px;
 }

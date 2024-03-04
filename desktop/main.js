@@ -28,6 +28,8 @@ function createWindow() {
 
   mainWindow.webContents.send('set-app-ip-address', expressAppIP);
 
+  mainWindow.setIcon('./favicon.png');
+  mainWindow.menuBarVisible = false;
   mainWindow.webContents.openDevTools();
 }
 
@@ -69,6 +71,7 @@ app.whenReady().then(() => {
   let links = [];
   io.on('connection', (socket) => {
     console.log('! Um cliente se conectou. !');
+    io.emit('sentFiles', JSON.stringify(links));
 
     const isAlreadyConnected =
       connectedDevicesList.filter((device) => device.id === socket.id)
@@ -134,22 +137,50 @@ app.whenReady().then(() => {
       );
     });
 
+    // socket.on('preloadFile', (file) => {
+    //   const fileObject = JSON.parse(file);
+    //     const extension = fileObject.originalName.split('.').pop();
+    //     const fileName = uuidv4() + '.' + extension;
+    //     const filePath = path.join(filesPath, fileName);
+
+    //     links.push({
+    //       fileName,
+    //       originalName: fileObject.originalName,
+    //       sentFromId: socket.id,
+    //       sentFromName: connectedDevicesList.filter(
+    //         (device) => device.id === socket.id
+    //       )[0].device,
+    //       alreadyUploaded: false,
+    //     });
+
+    //   socket.on('canUpload', () => {
+
+    //   })
+    // })
+
     socket.on('uploadFile', (file) => {
       try {
         const fileObject = JSON.parse(file);
         const extension = fileObject.originalName.split('.').pop();
-        const fileName = uuidv4() + '.' + extension;
+        const fileName = fileObject.uuid + '.' + extension;
         const filePath = path.join(filesPath, fileName);
+        const fileSize = fileObject.fileSize;
 
-        links.push({
-          fileName,
-          originalName: fileObject.originalName,
-          sentFromId: socket.id,
-          sentFromName: connectedDevicesList.filter(
-            (device) => device.id === socket.id
-          )[0].device,
-          alreadyUploaded: false,
-        });
+        console.log(fileObject.uuid, fileObject, extension);
+
+        if (fileObject.buffer === null) {
+          links.push({
+            fileName,
+            originalName: fileObject.originalName,
+            sentFromId: socket.id,
+            uuid: fileObject.uuid,
+            fileSize,
+            sentFromName: connectedDevicesList.filter(
+              (device) => device.id === socket.id
+            )[0].device,
+            alreadyUploaded: false,
+          });
+        }
 
         io.emit('sentFiles', JSON.stringify(links));
 
@@ -164,12 +195,28 @@ app.whenReady().then(() => {
         console.log('\nRecebido arquivo:', fileObject.originalName);
         console.log('\nSalvando em:', filePath);
 
+        // Momento em que foi criado o arquivo
+        const date = new Date();
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours();
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hours12 = hours > 12 ? hours - 12 : hours;
+        const strTime = [hours12, minutes, seconds].join(':') + ' ' + ampm;
+
         links = links.map((link) => {
-          if (link.fileName === fileName) {
+          if (link.uuid === fileObject.uuid) {
             return {
               ...link,
               alreadyUploaded: true,
               fileLink: `${expressAppUrl}/files/${fileName}`,
+              createdAt: {
+                date: `${day}/${month}/${year}`,
+                time: strTime,
+              },
             };
           }
           return link;

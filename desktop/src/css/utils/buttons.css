@@ -32,8 +32,8 @@
     color: #F5F5F5;
 }
 
-.utils-grey-button:hover svg path,
-.utils-grey-button-only-icon:hover svg path{
+.utils-grey-button svg path,
+.utils-grey-button-only-icon svg path{
     transition: 150ms;
 }
 
