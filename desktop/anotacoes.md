@@ -1,6 +1,6 @@
 # Consegui conectar com Websockets!
 
-Tem a opção do socket.io no Postman
+Como trocar pro console no servidor no app: CTRL + SHIFT + L
 
 # Informação importante:
 

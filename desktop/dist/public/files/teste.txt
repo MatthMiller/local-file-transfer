@@ -1,3 +1,0 @@
-Esse é o conteúdo do arquivo presente em
-
-texte.txt

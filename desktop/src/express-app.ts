@@ -12,18 +12,12 @@ import fs, { writeFile } from 'fs';
 import ip from 'ip';
 
 const app = express();
-// const router = express.Router();
-// 🐱‍🐉🐱‍🐉🌟
+
 // Gerador de QRCode pelo JavaScript (20kb): https://davidshimjs.github.io/qrcodejs/
 
 // Próxima coisa a testar: upload de imagem pelo React Native
 // https://socket.io/pt-br/how-to/upload-a-file
 
-// Ao iniciar a API deletar todos os arquivos temporários?
-
-// Ver uma forma de separar os arquivos recebidos
-// via websockets em uma pasta específica com uuid,
-// e depois retornar o link para download do arquivo.
 // Só preciso salvar o arquivo na máquina do Electron
 // React native -> Electron: salvando arquivo do celular no pc (temporariamente)
 // Electron -> React Native: movendo/upando arquivo do pc para pasta no pc (temporariamente)
@@ -32,8 +26,6 @@ const app = express();
 // const { app } = require('electron')
 // console.log(app.getPath('userData')) // Retorna o diretório de dados do usuário
 // console.log(app.getPath('temp')) // Retorna o diretório temporário
-
-// 🐱‍🐉🐱‍🐉🌟
 
 app.set('port', expressPort);
 app.set('views', path.join(__dirname, '..', 'views'));
@@ -62,9 +54,22 @@ app.use((err: any, req: any, res: any, _next: any) => {
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Deleta todos os arquivos temporários
+// da sessão anterior
+const filesPath = path.join(__dirname, '..', 'public', 'files');
+fs.readdir(filesPath, (err: any, files: any) => {
+  if (err) throw err;
+
+  for (const file of files) {
+    fs.unlink(path.join(filesPath, file), (err: any) => {
+      if (err) throw err;
+      console.log(`Deleted file: ${file}`);
+    });
+  }
+});
+
 let connectedDevicesList: any = [];
 let links: any = [];
-
 io.on('connection', (socket: any) => {
   console.log('! Um cliente se conectou. !');
 
@@ -183,17 +188,6 @@ io.on('connection', (socket: any) => {
         }
         return link;
       });
-
-      // links.push({
-      //   fileName,
-      //   originalName: fileObject.originalName,
-      //   sentFromId: socket.id,
-      //   sentFromName: connectedDevicesList.filter(
-      //     (device: any) => device.id === socket.id
-      //   )[0].device,
-      //   alreadyUploaded: true,
-      //   fileLink: `http://${ip.address()}:${app.get('port')}/files/${fileName}`,
-      // });
 
       socket.broadcast.emit('sentFiles', JSON.stringify(links));
     } catch (error) {
