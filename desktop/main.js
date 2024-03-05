@@ -55,10 +55,12 @@ app.whenReady().then(() => {
     if (err) throw err;
 
     for (const file of files) {
-      fs.unlink(path.join(filesPath, file), (err) => {
-        if (err) throw err;
-        console.log(`Deleted file: ${file}`);
-      });
+      if (file !== '.gitignore') {
+        fs.unlink(path.join(filesPath, file), (err) => {
+          if (err) throw err;
+          console.log(`Deleted file: ${file}`);
+        });
+      }
     }
   });
 
