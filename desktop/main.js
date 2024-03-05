@@ -55,7 +55,7 @@ app.whenReady().then(() => {
     if (err) throw err;
 
     for (const file of files) {
-      if (file !== '.gitignore') {
+      if (file !== '.gitkeep') {
         fs.unlink(path.join(filesPath, file), (err) => {
           if (err) throw err;
           console.log(`Deleted file: ${file}`);
