@@ -3,4 +3,5 @@
 @import 'css-reset.css';
 @import './utils/buttons.css';
 @import './utils/accordion.css';
+@import './utils/modal.css';
 @import 'header.css';

@@ -3,6 +3,7 @@ import updateConnectedDevices from './updateConnectedDevices.js';
 import updateHeader from './updateHeader.js';
 import setAccordionListeners from './setAccordionListeners.js';
 import updateSentFiles from './updateSentFiles.js';
+import generateQRModal from './generateQRModal.js';
 
 let canSendMessage = false;
 
@@ -13,6 +14,8 @@ const startClient = async () => {
   const { appIpAddress } = window.ipcRender;
   const ipAddress = await appIpAddress();
   updateHeader(ipAddress);
+  // Ativa listener de modal de QR Code
+  generateQRModal(ipAddress);
   runServer(ipAddress);
 };
 

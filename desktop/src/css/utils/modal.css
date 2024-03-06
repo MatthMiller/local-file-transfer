@@ -1,0 +1,101 @@
+.utils-modal-shadow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    place-content: center;
+
+    animation-name: entradaModalShadow;
+    animation-duration: 300ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+
+    display: none;
+}
+
+.utils-modal-shadow.active {
+    display: flex;
+}
+
+@keyframes entradaModalShadow {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 
+Fazer as configurações 
+ser uma página sobreposta
+que cobre de ponta a ponta? 
+Seria uma boa ideia se tivesse algumas
+configurações
+*/
+.utils-modal {
+    background-color: #101010;
+    border: 1px solid #282828;
+    border-radius: 5px;
+    padding: 32px 24px;
+    width: 60%;
+    height: max-content;
+    align-self: center;
+    min-width: 400px;
+    
+    animation-name: entradaModal;
+    animation-duration: 400ms;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    transform: translateY(-20px);
+
+    position: relative;
+}
+
+@keyframes entradaModal {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.utils-modal-title {
+    font-size: 1.3125rem;
+    font-size: 1.125rem;
+    font-weight: 400;
+    text-align: left;
+    /* margin-bottom: 24px; */
+    
+    display: flex;
+    gap: 48px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.utils-modal-separator {
+    height: 1px;
+    background-color: #282828;
+    margin: 24px 0px 32px 0px;
+}
+
+.utils-modal-qr-code {
+    display: flex;
+    justify-content: center;
+}
+
+.utils-modal-qr-code img {
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #FFF;
+}
+
+.utils-modal-close-button svg,
+.utils-modal-close-button svg path {
+    pointer-events: none;
+}

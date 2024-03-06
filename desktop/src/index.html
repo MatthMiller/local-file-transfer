@@ -11,11 +11,10 @@
 <body>
   <header class="header">
     <div class="left">
-      <button class="utils-grey-button">
+      <button class="utils-grey-button" id="js-generate-qr-button">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="current" xmlns="http://www.w3.org/2000/svg">
           <path d="M11.9167 19.25V17.4167H13.75V19.25H11.9167ZM10.0833 17.4167V12.8333H11.9167V17.4167H10.0833ZM17.4167 14.6667V11H19.25V14.6667H17.4167ZM15.5833 11V9.16667H17.4167V11H15.5833ZM4.58333 12.8333V11H6.41667V12.8333H4.58333ZM2.75 11V9.16667H4.58333V11H2.75ZM11 4.58333V2.75H12.8333V4.58333H11ZM4.125 6.875H6.875V4.125H4.125V6.875ZM2.75 8.25V2.75H8.25V8.25H2.75ZM4.125 17.875H6.875V15.125H4.125V17.875ZM2.75 19.25V13.75H8.25V19.25H2.75ZM15.125 6.875H17.875V4.125H15.125V6.875ZM13.75 8.25V2.75H19.25V8.25H13.75ZM15.5833 19.25V16.5H13.75V14.6667H17.4167V17.4167H19.25V19.25H15.5833ZM11.9167 12.8333V11H15.5833V12.8333H11.9167ZM8.25 12.8333V11H6.41667V9.16667H11.9167V11H10.0833V12.8333H8.25ZM9.16667 8.25V4.58333H11V6.41667H12.8333V8.25H9.16667ZM4.8125 6.1875V4.8125H6.1875V6.1875H4.8125ZM4.8125 17.1875V15.8125H6.1875V17.1875H4.8125ZM15.8125 6.1875V4.8125H17.1875V6.1875H15.8125Z" fill="#9B9B9B" />
         </svg>
-
         <p>Generate QR</p>
       </button>
     </div>
@@ -89,6 +88,21 @@
     </div>
   </main>
 
+  <div class="utils-modal-shadow" id="js-qr-modal">
+    <div class="utils-modal">
+      <div class="utils-modal-title">
+        <p>Scan the QR Code with your LFT App</p>
+        <button class="utils-grey-button-only-icon utils-modal-close-button" id="js-close-qr-modal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="current" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="#A6A6A6" />
+          </svg>
+        </button>
+      </div>
+      <div class="utils-modal-separator"></div>
+      <div class="utils-modal-qr-code" id="js-qr-code"></div>
+    </div>
+  </div>
+
   <script type="importmap">
     {
       "imports": {
@@ -96,6 +110,7 @@
       }
     }
   </script>
+  <script src="./js/lib/qrcode.min.js"></script>
   <script type="module" src="./js/script.js"></script>
 </body>
 
