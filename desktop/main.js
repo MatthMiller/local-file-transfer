@@ -139,43 +139,24 @@ app.whenReady().then(() => {
       );
     });
 
-    // socket.on('preloadFile', (file) => {
-    //   const fileObject = JSON.parse(file);
-    //     const extension = fileObject.originalName.split('.').pop();
-    //     const fileName = uuidv4() + '.' + extension;
-    //     const filePath = path.join(filesPath, fileName);
-
-    //     links.push({
-    //       fileName,
-    //       originalName: fileObject.originalName,
-    //       sentFromId: socket.id,
-    //       sentFromName: connectedDevicesList.filter(
-    //         (device) => device.id === socket.id
-    //       )[0].device,
-    //       alreadyUploaded: false,
-    //     });
-
-    //   socket.on('canUpload', () => {
-
-    //   })
-    // })
-
     socket.on('uploadFile', (file) => {
       try {
         const fileObject = JSON.parse(file);
         const extension = fileObject.originalName.split('.').pop();
-        const fileName = fileObject.uuid + '.' + extension;
+        const fileName = fileObject.fileUUID + '.' + extension;
         const filePath = path.join(filesPath, fileName);
         const fileSize = fileObject.fileSize;
+        const deviceUUID = fileObject.deviceUUID;
 
-        console.log(fileObject.uuid, fileObject, extension);
+        console.log(fileObject.fileUUID, fileObject, extension);
 
         if (fileObject.buffer === null) {
           links.push({
             fileName,
             originalName: fileObject.originalName,
-            sentFromId: socket.id,
-            uuid: fileObject.uuid,
+            connectionID: socket.id,
+            fileUUID: fileObject.fileUUID,
+            deviceUUID,
             fileSize,
             sentFromName: connectedDevicesList.filter(
               (device) => device.id === socket.id

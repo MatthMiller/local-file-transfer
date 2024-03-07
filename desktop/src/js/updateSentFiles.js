@@ -5,8 +5,7 @@ const updateSentFiles = (filesArray, desktopId) => {
   const sentFilesCounter = document.querySelector('#js-sent-files-counter');
 
   const filesFromDesktop = filesArray.filter((file) => {
-    // console.log(file.sentFromId);
-    return file.sentFromId === desktopId;
+    return file.deviceUUID === desktopId;
   });
 
   // funfando
