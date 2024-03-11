@@ -30,12 +30,11 @@ body {
     border-radius: 4px;
 }
 
-/* hover na scrollbar */
 ::-webkit-scrollbar-thumb:hover {
     background-color: #282828;
 }
 
-/* Adiciona padding para compensar a largura da scrollbar */
+/* Adiciona margin para compensar a largura da scrollbar */
 .main {
     margin-right: 6px;
     margin-bottom: 4px;
