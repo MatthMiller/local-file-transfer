@@ -9,6 +9,10 @@ html {
     color: #F5F5F5;
     font-size: 16px;
 
+    /* Colocando scroll somente no main */
+    max-height: 100vh;
+    /* overflow: hidden; */
+
     user-select: none;
 }
 

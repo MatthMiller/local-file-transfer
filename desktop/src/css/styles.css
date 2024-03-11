@@ -1,7 +1,12 @@
 @import './fonts/ibm-mono.css';
 @import './fonts/ibm-sans.css';
 @import 'css-reset.css';
+
+/* Utils */
 @import './utils/buttons.css';
 @import './utils/accordion.css';
 @import './utils/modal.css';
+
+/* Components */
+@import 'main.css';
 @import 'header.css';

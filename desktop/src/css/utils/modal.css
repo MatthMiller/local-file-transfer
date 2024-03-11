@@ -10,6 +10,7 @@
     animation-timing-function: ease-in-out;
     animation-fill-mode: forwards;
     opacity: 0;
+    z-index: 6;
 
     display: none;
 }
@@ -43,6 +44,7 @@ configurações
     height: max-content;
     align-self: center;
     min-width: 400px;
+    max-width: 600px;
     
     animation-name: entradaModal;
     animation-duration: 400ms;
@@ -69,10 +71,9 @@ configurações
     font-size: 1.3125rem;
     font-size: 1.125rem;
     font-weight: 400;
-    text-align: left;
-    /* margin-bottom: 24px; */
-    
-    display: flex;
+    /* text-align: left; */
+    /* display: flex; */
+    text-align: center;    
     gap: 48px;
     justify-content: space-between;
     align-items: flex-start;
@@ -87,6 +88,7 @@ configurações
 .utils-modal-qr-code {
     display: flex;
     justify-content: center;
+    margin-bottom: 32px;
 }
 
 .utils-modal-qr-code img {
@@ -95,7 +97,13 @@ configurações
     background-color: #FFF;
 }
 
+.utils-modal-button-container {
+    display: flex;
+    place-content: center;
+}
+
 .utils-modal-close-button svg,
-.utils-modal-close-button svg path {
+.utils-modal-close-button svg path,
+.utils-modal-close-button p {
     pointer-events: none;
 }

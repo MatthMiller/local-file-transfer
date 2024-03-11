@@ -8,7 +8,6 @@ const updateSentFiles = (filesArray, desktopId) => {
     return file.deviceUUID === desktopId;
   });
 
-  // funfando
   console.log(filesFromDesktop);
   sentFilesCounter.innerText = `(${filesFromDesktop.length})`;
 

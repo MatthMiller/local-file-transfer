@@ -2,7 +2,11 @@ const generateQRModal = (text) => {
   const generateQRButton = document.getElementById('js-generate-qr-button');
   const qrModal = document.getElementById('js-qr-modal');
 
-  new QRCode('js-qr-code', text);
+  new QRCode('js-qr-code', {
+    text,
+    width: 220,
+    height: 220,
+  });
 
   generateQRButton.addEventListener('click', () => {
     qrModal.classList.add('active');
