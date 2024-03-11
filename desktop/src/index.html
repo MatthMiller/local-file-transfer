@@ -75,6 +75,19 @@
     </div>
 
     <div class="received">
+      <div class="utils-accordion-wrapper active">
+        <div class="utils-accordion-title">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="current" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11 14.0937L5.5 8.59374L6.78333 7.31041L11 11.5271L15.2167 7.31041L16.5 8.59374L11 14.0937Z" fill="#6F6F6F" />
+          </svg>
+          <p>Received <span class="utils-accordion-item-counter" id="js-received-files-counter"></span>:</p>
+        </div>
+        <div class="utils-accordion-content" id="js-accordion-received-files-content">
+        </div>
+      </div>
+    </div>
+
+    <div class="sent">
       <div class="utils-accordion-wrapper">
         <div class="utils-accordion-title">
           <svg width="22" height="22" viewBox="0 0 22 22" fill="current" xmlns="http://www.w3.org/2000/svg">
@@ -102,8 +115,8 @@
       <div class="utils-modal-qr-code" id="js-qr-code"></div>
       <div class="utils-modal-button-container">
         <button class="utils-grey-button utils-modal-close-button" id="js-close-qr-modal">
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="current" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6.4 19L5 17.6L10.6 12L5 6.4L6.4 5L12 10.6L17.6 5L19 6.4L13.4 12L19 17.6L17.6 19L12 13.4L6.4 19Z" fill="#A6A6A6" />
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5.86444 17.0996L4.89844 16.1336L10.0318 11.0002L4.89844 5.86689L5.86444 4.90088L10.9978 10.0342L16.1311 4.90088L17.0971 5.86689L11.9638 11.0002L17.0971 16.1336L16.1311 17.0996L10.9978 11.9662L5.86444 17.0996Z" fill="#A6A6A6" />
           </svg>
           <p>Close QR Code</p>
         </button>

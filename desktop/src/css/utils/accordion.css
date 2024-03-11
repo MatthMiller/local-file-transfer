@@ -68,12 +68,16 @@
     font-weight: 400;
 }
 
+.utils-accordion-item-from,
 .utils-accordion-item-status {
-    letter-spacing: 0.32px;
     font-size: .75rem;
     line-height: 1;
-    font-weight: 600;
     color: #A9A9A9;
+}
+
+.utils-accordion-item-status {
+    letter-spacing: 0.32px;
+    font-weight: 600;
 }
 
 .utils-accordion-item-status span{

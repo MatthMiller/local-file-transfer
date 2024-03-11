@@ -4,6 +4,7 @@ import updateHeader from './updateHeader.js';
 import setAccordionListeners from './setAccordionListeners.js';
 import updateSentFiles from './updateSentFiles.js';
 import generateQRModal from './generateQRModal.js';
+import updateReceivedFiles from './updateReceivedFiles.js';
 
 let canSendMessage = false;
 let deviceUUID;
@@ -45,6 +46,7 @@ const runServer = (ipAddress) => {
     socket.on('sentFiles', (files) => {
       console.log(`Arquivos: ${files}`);
       updateSentFiles(JSON.parse(files), deviceUUID);
+      updateReceivedFiles(JSON.parse(files), deviceUUID);
     });
   });
 
