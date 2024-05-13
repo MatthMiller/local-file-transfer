@@ -36,4 +36,4 @@ dist/src/
 dist/package.json
 
 # removendo pasta .vscode
-.vscode/
+.vscode
