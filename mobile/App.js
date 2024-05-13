@@ -1,8 +1,21 @@
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { useFonts } from 'expo-font';
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
 import io from 'socket.io-client';
 
+const Stack = createStackNavigator();
+
 const App = () => {
+  const [fontsLoaded] = useFonts({
+    IBMPlexMonoLight: require('./assets/fonts/IBMPlexMono-Light.ttf'),
+    IBMPlexMonoRegular: require('./assets/fonts/IBMPlexMono-Regular.ttf'),
+    IBMPlexSansLight: require('./assets/fonts/IBMPlexSans-Light.ttf'),
+    IBMPlexSansRegular: require('./assets/fonts/IBMPlexSans-Regular.ttf'),
+    IBMPlexSansMedium: require('./assets/fonts/IBMPlexSans-Medium.ttf'),
+    IBMPlexSansSemiBold: require('./assets/fonts/IBMPlexSans-SemiBold.ttf'),
+  });
+
   useEffect(() => {
     const socket = io('http://192.168.15.50:3000'); // Substitua 'seu-ip' pelo IP do seu servidor
 
@@ -34,10 +47,18 @@ const App = () => {
     };
   }, []);
 
+  if (!fontsLoaded) return null;
+
   return (
-    <View>
-      <Text>Exemplo de Cliente Socket.IO em React Native</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name='Home'
+          component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
