@@ -34,3 +34,6 @@ yarn-error.*
 
 dist/src/
 dist/package.json
+
+# removendo pasta .vscode
+.vscode/
