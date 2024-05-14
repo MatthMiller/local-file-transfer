@@ -1,12 +1,45 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TextInput, View } from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  ToastAndroid,
+  View,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import HeaderStatus from '../Components/HeaderStatus';
+import { GlobalContext } from '../Contexts/GlobalContext';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
+  const { headerStatus, attemptToConnect } = React.useContext(GlobalContext);
+
+  const [ipInput, setIpInput] = React.useState('');
+
+  const handleConnectByIp = () => {
+    if (!ipInput.length) {
+      ToastAndroid.show('Empty input', ToastAndroid.SHORT);
+      return;
+    }
+
+    const ipRegex = new RegExp('^([0-9]{1,3}\\.){3}[0-9]{1,3}$', 'g');
+    if (!ipRegex.test(ipInput)) {
+      ToastAndroid.show('Invalid IP address', ToastAndroid.SHORT);
+      return;
+    }
+
+    attemptToConnect(ipInput);
+  };
+
+  React.useEffect(() => {
+    if (headerStatus.isConnected) {
+      navigation.navigate('Activity');
+    }
+  }, [headerStatus.isConnected]);
+
   return (
     <View style={styles.container}>
-      <HeaderStatus />
+      <HeaderStatus navigation={navigation} />
       <View style={styles.innerContainer}>
         <View style={styles.top}>
           <Text style={styles.text}>
@@ -17,11 +50,15 @@ const HomeScreen = () => {
             <TextInput
               style={styles.input}
               placeholderTextColor='#797979'
+              value={ipInput}
+              keyboardType='numeric'
+              onChangeText={(changedText) => setIpInput(changedText)}
               placeholder='Ex: 192.168.15.50'
             />
             <TouchableOpacity
               style={styles.connectIconContainer}
               activeOpacity={0.7}
+              onPress={handleConnectByIp}
             >
               <Image
                 style={styles.connectIcon}
@@ -79,16 +116,15 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     flex: 1,
     fontSize: 16,
-    lineHeight: 16,
     paddingHorizontal: 16,
-    paddingVertical: 10,
+    paddingVertical: 9,
     fontFamily: 'IBMPlexSansRegular',
     color: '#F5F5F5',
   },
   connectIconContainer: {
     backgroundColor: '#1D1D1D',
     borderRadius: 5,
-    padding: 12.5,
+    padding: 12,
   },
   connectIcon: {
     height: 24,

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GlobalContext } from '../Contexts/GlobalContext';
 
-const HeaderStatus = () => {
+const HeaderStatus = ({ navigation }) => {
   const { headerStatus } = React.useContext(GlobalContext);
   const insets = useSafeAreaInsets();
 
@@ -11,7 +11,9 @@ const HeaderStatus = () => {
     <>
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <Text style={styles.text}>
-          {headerStatus.isConnected ? 'Conectado em ip' : 'DISCONNECTED'}
+          {headerStatus.isConnected
+            ? `CONNECTED ON ${headerStatus.ip}`
+            : 'DISCONNECTED'}
         </Text>
       </View>
       <View style={styles.border}></View>
