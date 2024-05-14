@@ -3,8 +3,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';
 import React, { useEffect } from 'react';
 import io from 'socket.io-client';
+import { GlobalStorage } from './Contexts/GlobalContext';
+import HomeScreen from './Screens/HomeScreen';
 
 const Stack = createStackNavigator();
+
+const fileTransferTheme = {
+  colors: {
+    primary: '#F5F5F5',
+    background: '#030303',
+  },
+};
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -50,15 +59,17 @@ const App = () => {
   if (!fontsLoaded) return null;
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name='Home'
-          component={HomeScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GlobalStorage>
+      <NavigationContainer theme={fileTransferTheme}>
+        <Stack.Navigator>
+          <Stack.Screen
+            name='Home'
+            component={HomeScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GlobalStorage>
   );
 };
 
